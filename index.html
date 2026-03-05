@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проверка...</title><style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background: radial-gradient(circle at center,#0a1633 0%,#050b1a 40%,#000000 100%);
+color:#fff;
+font-family:'Arial Black',Arial,sans-serif;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+.container{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:28px;
+}
+
+/* TEXT */
+
+.title{
+text-align:center;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.title-top{
+font-family:monospace;
+font-size:13px;
+color:#7080a8;
+letter-spacing:2px;
+text-transform:uppercase;
+opacity:.55;
+}
+
+.title-main{
+font-size:28px;
+font-weight:900;
+}
+
+.title-sub{
+font-family:monospace;
+font-size:14px;
+opacity:.55;
+}
+
+/* VIDEO */
+
+.video-wrap{
+position:relative;
+height:420px;
+aspect-ratio:9/16;
+border-radius:28px;
+overflow:hidden;
+background:#050b1a;
+box-shadow:
+0 0 0 2px rgba(255,255,255,0.15),
+0 20px 60px rgba(0,0,0,0.8);
+}
+
+.video-wrap video{
+width:100%;
+height:100%;
+object-fit:cover;
+filter: brightness(0.8) contrast(1.1);
+transform: scale(1.02);
+}
+
+.video-overlay{
+position:absolute;
+inset:0;
+background:radial-gradient(circle at center,
+rgba(0,0,0,0.15),
+rgba(0,0,0,0.45));
+}
+
+/* SCAN LINE */
+
+.scan-line{
+position:absolute;
+left:0;
+right:0;
+height:3px;
+background:linear-gradient(90deg,transparent,white,transparent);
+animation:scan 2.4s infinite;
+}
+
+@keyframes scan{
+0%{top:0}
+100%{top:100%}
+}
+
+/* CORNERS */
+
+.corner{
+position:absolute;
+width:18px;
+height:18px;
+border-color:rgba(140,190,255,0.75);
+border-style:solid;
+}
+
+.corner-tl{top:12px;left:12px;border-width:2px 0 0 2px;}
+.corner-tr{top:12px;right:12px;border-width:2px 2px 0 0;}
+.corner-bl{bottom:12px;left:12px;border-width:0 0 2px 2px;}
+.corner-br{bottom:12px;right:12px;border-width:0 2px 2px 0;}
+
+/* FULLSCREEN BUTTON */
+
+.start-btn{
+position:fixed;
+inset:0;
+z-index:9999;
+border:0;
+background:radial-gradient(circle,#0a1633,#000);
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+}
+
+.start-card{
+width:360px;
+padding:22px;
+border-radius:22px;
+display:flex;
+gap:12px;
+align-items:center;
+
+background:linear-gradient(180deg,#1c3faa,#0b1f5c);
+border:1px solid rgba(120,170,255,0.45);
+
+box-shadow:
+0 24px 90px rgba(0,0,0,0.9),
+0 0 45px rgba(60,120,255,0.45);
+}
+
+.icon{
+width:28px;
+height:28px;
+border-radius:10px;
+background:rgba(255,255,255,0.15);
+display:grid;
+place-items:center;
+}
+
+.icon::before{
+content:"✓";
+font-weight:900;
+}
+
+.text{
+display:flex;
+flex-direction:column;
+gap:4px;
+}
+
+.main{
+font-size:18px;
+font-weight:900;
+}
+
+.sub{
+font-family:monospace;
+font-size:12px;
+opacity:.8;
+}
+
+/* PROGRESS */
+
+.progress-section{
+width:320px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+.top-row{
+display:flex;
+justify-content:space-between;
+}
+
+.status-text{
+font-family:monospace;
+font-size:14px;
+opacity:.7;
+}
+
+.percent{
+font-size:48px;
+font-weight:900;
+}
+
+.bar-track{
+width:100%;
+height:6px;
+background:#222;
+border-radius:99px;
+overflow:hidden;
+}
+
+.bar-fill{
+height:100%;
+width:0%;
+background:white;
+transition:.25s;
+}
+
+/* RESULT BUTTON */
+
+.verdict{
+display:none;
+}
+
+.btn{
+padding:14px 40px;
+border-radius:50px;
+text-decoration:none;
+font-weight:900;
+border:1px solid rgba(170,210,255,0.35);
+color:#fff;
+background:linear-gradient(180deg,#1c3faa,#0b1f5c);
+}
+
+</style></head><body><div class="container"><div class="title">
+<div class="title-top">system check v2.1</div>
+<div class="title-main">Проверяем, что вы не робот</div>
+<div class="title-sub">Нажмите кнопку ниже</div>
+</div><div class="video-wrap"><video id="vid" src="cat.mp4" loop playsinline></video>
+
+<div class="video-overlay"></div><button class="start-btn" id="startBtn"><span class="start-card"><span class="icon"></span>
+
+<span class="text">
+<span class="main">Подтвердить, что я не робот</span>
+<span class="sub">Нажмите, чтобы включить звук</span>
+</span></span></button><div class="scan-line"></div><div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div></div><div class="progress-section" id="progress-section"><div class="top-row">
+<div class="status-text" id="status">Инициализация сканера...</div>
+<div class="percent" id="percent">0%</div>
+</div><div class="bar-track">
+<div class="bar-fill" id="bar"></div>
+</div></div><div class="verdict" id="verdict">
+<a class="btn" href="https://mirzohiddevloper.github.io/Resume/">
+Зайти на сайт
+</a>
+</div></div><script>
+
+const messages=[
+"Инициализация сканера...",
+"Поиск серийного номера...",
+"Считывание чипа...",
+"Анализ моторики...",
+"Проверка масляных следов...",
+"Сканирование процессора...",
+"Верификация батареи...",
+"Финальная проверка..."
+];
+
+const bar=document.getElementById('bar');
+const percent=document.getElementById('percent');
+const status=document.getElementById('status');
+const verdict=document.getElementById('verdict');
+
+const startBtn=document.getElementById('startBtn');
+const vid=document.getElementById('vid');
+
+let progress=0;
+
+function step(){
+
+if(progress>=100){
+
+percent.textContent='100%';
+bar.style.width='100%';
+status.textContent="Готово.";
+
+setTimeout(()=>{
+verdict.style.display='block';
+},600);
+
+return;
+
+}
+
+progress+=Math.random()*2.5+0.5;
+
+percent.textContent=Math.floor(progress)+'%';
+bar.style.width=progress+'%';
+
+let msgIndex=Math.min(
+Math.floor((progress/100)*messages.length),
+messages.length-1
+);
+
+status.textContent=messages[msgIndex];
+
+setTimeout(step,120);
+
+}
+
+startBtn.onclick=async()=>{
+
+startBtn.style.display="none";
+
+vid.muted=false;
+vid.volume=1;
+
+try{
+await vid.play();
+}catch{
+vid.controls=true;
+}
+
+step();
+
+};
+
+</script></body>
+</html>
